@@ -19,6 +19,6 @@ public class OrderDAO {
     @Id
     @GeneratedValue
     private int id;
-    @ManyToMany(mappedBy = "orderDAOList")
-    private List<ItemDAO>  itemDAOList;
+    @ManyToMany
+    private List<ItemDAO> itemDAOList;
 }

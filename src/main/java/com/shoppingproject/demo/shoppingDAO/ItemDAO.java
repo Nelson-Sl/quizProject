@@ -26,6 +26,6 @@ public class ItemDAO {
     private String itemImgUrl;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(mappedBy = "itemDAOList")
     private List<OrderDAO> orderDAOList;
 }

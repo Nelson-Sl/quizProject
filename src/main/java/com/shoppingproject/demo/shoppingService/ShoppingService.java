@@ -33,4 +33,8 @@ public class ShoppingService {
     public List<OrderDAO> getOrderList() {
         return orderRepository.findAll();
     }
+
+    public void deleteSingleOrder(int id) {
+        orderRepository.deleteById(id);
+    }
 }

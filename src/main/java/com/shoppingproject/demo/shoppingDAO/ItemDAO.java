@@ -26,6 +26,6 @@ public class ItemDAO {
     private String itemImgUrl;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "itemDAOList")
+    @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "itemDAOList")
     private List<OrderDAO> orderDAOList;
 }

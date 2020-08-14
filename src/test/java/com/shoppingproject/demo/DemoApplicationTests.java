@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -93,7 +93,7 @@ class DemoApplicationTests {
 		String newItemStr = objectMapper.writeValueAsString(newItem);
 		mockMvc.perform(put("/shop/item")
 				.content(newItemStr).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(status().isCreated());
 
 		mockMvc.perform(get("/shop/item"))
 				.andExpect(jsonPath("$",hasSize(3)))
@@ -108,7 +108,8 @@ class DemoApplicationTests {
 				.andExpect(jsonPath("$[2].itemName",is("radio")))
 				.andExpect(jsonPath("$[2].itemPrice",is(39.5)))
 				.andExpect(jsonPath("$[2].itemUnit",is("CNY")))
-				.andExpect(jsonPath("$[2].itemImgUrl",is("./radio.jpg")));
+				.andExpect(jsonPath("$[2].itemImgUrl",is("./radio.jpg")))
+				.andExpect(status().isOk());
 	}
 
 	@Test
@@ -125,6 +126,15 @@ class DemoApplicationTests {
 				.andExpect(jsonPath("$[0].itemDAOList[1].itemName",is("fan")))
 				.andExpect(jsonPath("$[0].itemDAOList[1].itemPrice",is(10.0)))
 				.andExpect(jsonPath("$[0].itemDAOList[1].itemUnit",is("CNY")))
-				.andExpect(jsonPath("$[0].itemDAOList[1].itemImgUrl",is("./fan.jpg")));
+				.andExpect(jsonPath("$[0].itemDAOList[1].itemImgUrl",is("./fan.jpg")))
+				.andExpect(status().isOk());
+	}
+
+	@Test
+	void userCanDeleteOrder() throws Exception {
+		mockMvc.perform(delete("/shop/order")
+				.param("id",String.valueOf(orderItem1)))
+				.andExpect(status().isOk());
+		assertEquals(0, orderRepository.count());
 	}
 }
